@@ -19,7 +19,7 @@ install:
   - ansible --version
 
   # Install dependency role
-  - ansible-galaxy install jonathonball.docker
+  - ansible-galaxy install --roles-path /home/travis/build/jonathonball jonathonball.docker
 
   # Create ansible.cfg with correct roles_path
   - printf '[defaults]\nroles_path=../' >ansible.cfg
