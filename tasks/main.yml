@@ -1,0 +1,36 @@
+---
+# tasks file for ansible-role-docker-swarm
+
+- include_tasks: Ubuntu.yml
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Install Ansible Python dependencies
+  pip:
+    name: docker
+    state: present
+
+- name: Create swarm
+  docker_swarm:
+    state: present
+  when: "inventory_hostname in groups.docker_swarm_manager"
+  register: swarm_info
+  tags: molecule-notest
+
+- name: Add workers
+  docker_swarm:
+    state: join
+    join_token: "{{ hostvars[groups.docker_swarm_manager[0]]['swarm_info']['swarm_facts']['JoinTokens']['Worker'] }}"
+    remote_addrs: "{{ hostvars[groups.docker_swarm_manager[0]]['ansible_default_ipv4']['address'] }}"
+    advertise_addr: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:4567"
+  when: "inventory_hostname in groups.docker_swarm_worker"
+  tags: molecule-notest
+
+- name: Setup an internal docker registry
+  docker_swarm_service:
+    name: registry
+    image: registry:2
+    publish:
+      - published_port: 5000
+        target_port: 5000
+  when: "inventory_hostname in groups.docker_swarm_manager"
+  tags: molecule-notest

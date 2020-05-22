@@ -1,0 +1,8 @@
+---
+# Ubuntu specific tasks for installing docker swarm
+
+- name: Install pip3
+  apt:
+    name: python3-pip
+    state: present
+    force_apt_get: True
