@@ -18,6 +18,9 @@ install:
   # Check ansible version
   - ansible --version
 
+  # Install dependency role
+  - ansible-galaxy install jonathonball.docker
+
   # Create ansible.cfg with correct roles_path
   - printf '[defaults]\nroles_path=../' >ansible.cfg
 
