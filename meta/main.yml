@@ -9,5 +9,10 @@ galaxy_info:
     - docker
     - swarm
 
+  platforms:
+    - name: Ubuntu
+      versions:
+      - bionic
+
 dependencies:
   - jonathonball.docker
