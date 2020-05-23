@@ -8,6 +8,7 @@ driver:
 platforms:
   - name: instance
     image: docker.io/pycontribs/ubuntu
+    pre_build_image: true
 provisioner:
   name: ansible
 verifier:
